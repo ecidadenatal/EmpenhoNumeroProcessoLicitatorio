@@ -1,0 +1,57 @@
+<?xml version="1.0" standalone="yes" ?>
+<table name="plugins.empempenhoprocessolicitatorio" description="" prefix="" label="Guarda o numero do processo licitatorio do empenho" type="0">
+  <fields>
+    <field name="sequencial"
+           conteudo="int4"
+           description="Sequencial"
+           inivalue="0"
+           label="Sequencial"
+           size="10"
+           null="f"
+           uppercase="f"
+           autocompl="f"
+           aceitatipo="1"
+           tipoobj="text"
+           labelrel="Sequencial"
+           reference=""
+           ispk="t"
+           hassequence="t">
+      <sequence name="plugins.empempenhoprocessolicitatorio_sequencial_seq" ></sequence>
+    </field>
+    <field name="empempenho"
+           conteudo="int4"
+           description="Empenho"
+           inivalue="0"
+           label="Empenho"
+           size="10"
+           null="f"
+           uppercase="f"
+           autocompl="f"
+           aceitatipo="1"
+           tipoobj="text"
+           labelrel="Empenho"
+           reference=""
+           ispk="f"
+           hassequence="f">
+    </field>
+    <field name="numerorecibolicitacao"
+           conteudo="int8"
+           description="Recibo Licitacao"
+           inivalue="0"
+           label="Recibo Licitacao"
+           size="10"
+           null="t"
+           uppercase="f"
+           autocompl="f"
+           aceitatipo="1"
+           tipoobj="text"
+           labelrel="Recibo Licitacao"
+           reference=""
+           ispk="f"
+           hassequence="f">
+    </field>
+  </fields>
+  <primarykey>
+    <fieldpk  name="sequencial"></fieldpk>
+  </primarykey>
+</table>

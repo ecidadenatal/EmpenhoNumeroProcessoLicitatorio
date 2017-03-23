@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<modification>
+  <name>SuprimentoDeFundos</name>
+  <id>SuprimentoDeFundos</id>
+  <ecidade-version>2.3.47</ecidade-version>
+
+  <file path='forms/db_frmempempenhonota.php'>
+
+    <operation>
+      <search regex="true"><![CDATA[(<tr>\n.*\$Te54_codtipo.*>)]]></search>
+      <add>
+        <![CDATA[<tr>
+         <td><b>Número do recibo do comprovante de envio de dados/documentos ao SIAI - Anexo XXXVIII:</b></td>
+         <td><?db_input('numerorecibolicitacao',18,1,true,'text',$db_opcao,"","","","",10)?></td>
+        </tr>
+        $1]]>
+      </add>
+    </operation>    
+    
+    <operation>
+      <search regex="true"><![CDATA[(function\s*js_valida\(.*\)\s*{)]]></search>
+      <add>
+        <![CDATA[$1
+    
+    if ($F("numerorecibolicitacao") == "" && $F("e54_codcom") != 7 && <?=db_getsession("DB_instit");?> != 9) {
+		alert("O campo Número do recibo do comprovante de envio de dados/documentos ao SIAI - Anexo XXXVIII é de preenchimento obrigatório.");
+	    return false;
+	}
+          ]]>
+      </add>
+    </operation> 
+
+  </file>
+  
+  <file path='emp4_empempenho004.php'>
+
+    <operation>
+      <search regex="true"><![CDATA[(\$e60_numemp\s*=\s*\$clempempenho->e60_numemp\s*;)]]></search>
+      <add>
+        <![CDATA[$1
+        
+        if (!empty($numerorecibolicitacao)) {
+          $oDaoEmpEmpenhoProcessoLicitatorio = db_utils::getDao("empempenhoprocessolicitatorio");
+          $oDaoEmpEmpenhoProcessoLicitatorio->empempenho = $e60_numemp;
+          $oDaoEmpEmpenhoProcessoLicitatorio->numerorecibolicitacao = $numerorecibolicitacao;
+          $oDaoEmpEmpenhoProcessoLicitatorio->incluir(null);
+          if ($oDaoEmpEmpenhoProcessoLicitatorio->erro_status == 0) {
+          	$sqlerro  = true;
+          	$erro_msg = $oDaoEmpEmpenhoProcessoLicitatorio->erro_msg;
+          }
+        }
+        ]]>
+      </add>
+    </operation>    
+
+  </file>
+
+  <file path='fpdf151/impmodelos/mod_imprime6.php'>
+    <operation>
+      <search regex="true"><![CDATA[(\$this->objpdf->text\(.*('|")\s*Licitação\s*('|")\);)]]></search>
+      <add>
+        <![CDATA[$1
+        
+  $oDaoEmpEmpenhoProcessoLicitatorio = db_utils::getDao("empempenhoprocessolicitatorio");
+  $rsProcessoLicitatorio = $oDaoEmpEmpenhoProcessoLicitatorio->sql_record($oDaoEmpEmpenhoProcessoLicitatorio->sql_query(null, "*", null, "empempenho = $this->numemp"));
+  $nNumeroReciboSIAI = db_utils::fieldsMemory($rsProcessoLicitatorio, 0)->numerorecibolicitacao;
+  $this->objpdf->text($xcol +60, $xlin +43, 'Recibo SIAI:');
+  $this->objpdf->Setfont('Arial', '', 8);
+  $this->objpdf->text($xcol +85, $xlin +43, $nNumeroReciboSIAI);
+  $this->objpdf->Setfont('Arial', 'B', 8);
+  
+        ]]>
+      </add>
+    </operation>    
+  </file>  
+  
+  <file path='forms/db_frmempempenhoaltera.php'>
+    <operation>
+      <search regex="true"><![CDATA[(<\/table>)]]></search>
+      <add>
+        <![CDATA[<tr>
+         <td colspan=2>
+         <fieldset>
+           <legend><b>Número do recibo do comprovante de envio de dados/documentos ao SIAI - Anexo XXXVIII:</b></legend>
+           <?db_input('numerorecibolicitacao',18,1,true,'text',$db_opcao,"","","","",10)?>
+         </fieldset>
+         </td>
+      </tr>
+    $1]]>
+      </add>
+    </operation>  
+  </file>
+  
+  <file path='emp1_empempenho005.php'>
+    <operation>
+      <search regex="true"><![CDATA[(if\s*\(\s*isset\(\$e68_numemp\)\s*&&\s*\$e68_numemp\s*==\s*\"s\"\)\s*\{)]]></search>
+      <add>
+        <![CDATA[  if (isset($numerorecibolicitacao)) {
+  	
+  	$oDaoEmpEmpenhoProcessoLicitatorio = db_utils::getDao("empempenhoprocessolicitatorio");
+  	$oDaoEmpEmpenhoProcessoLicitatorio->excluir(null, "empempenho = {$e60_numemp}");
+  	if ($oDaoEmpEmpenhoProcessoLicitatorio->erro_status == 0) {
+  	  $sqlerro  = true;
+  	  $erro_msg = "1- ".$oDaoEmpEmpenhoProcessoLicitatorio->erro_msg;
+  	}
+  	if ($sqlerro == false) {
+  	  $oDaoEmpEmpenhoProcessoLicitatorio->empempenho = $e60_numemp;
+  	  $oDaoEmpEmpenhoProcessoLicitatorio->numerorecibolicitacao = $numerorecibolicitacao;
+  	  $oDaoEmpEmpenhoProcessoLicitatorio->incluir(null);
+  	  if ($oDaoEmpEmpenhoProcessoLicitatorio->erro_status == 0) {
+  	  	$sqlerro  = true;
+  	  	$erro_msg = $oDaoEmpEmpenhoProcessoLicitatorio->erro_msg;
+  	  }
+    }
+  	 
+  }
+        
+  $1]]>
+      </add>
+    </operation> 
+    <operation>
+      <search regex="true"><![CDATA[(\$result\s*=\s*\$clemppresta->)]]></search>
+      <add>
+        <![CDATA[$oDaoEmpEmpenhoProcessoLicitatorio = db_utils::getDao("empempenhoprocessolicitatorio");
+  $result=$oDaoEmpEmpenhoProcessoLicitatorio->sql_record($oDaoEmpEmpenhoProcessoLicitatorio->sql_query_file(null,"*", null, "empempenho = $e60_numemp"));
+  if($oDaoEmpEmpenhoProcessoLicitatorio->numrows > 0){
+  	db_fieldsmemory($result,0);
+  }
+        
+  $1]]>
+      </add>
+    </operation>  
+  </file>
+  
+</modification>

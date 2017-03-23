@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <plugin name="EmpenhoNumeroProcessoLicitatorio" label="Numero Processo Licitatorio do Empenho" plugin-version="1.0" ecidade-version="2.3.47" id-modulo="398">
+    <id id="EmpenhoNumeroProcessoLicitatorio"> </id>
+    <files>
+
+      <!-- classe -->
+      <file name="db_empempenhoprocessolicitatorio_classe.php"    path="/classes/db_empempenhoprocessolicitatorio_classe.php" />
+      <!-- dd -->
+      <file name="plugins.empempenhoprocessolicitatorio.dd.xml"    path="/dd/tabelas/plugins.empempenhoprocessolicitatorio.dd.xml" />
+
+      <!-- outro -->
+      <file name="EmpenhoNumeroProcessoLicitatorio.xml"    path="/modification/xml/EmpenhoNumeroProcessoLicitatorio.xml" />
+
+    </files>
+    <estrutura install="/instalacao.sql" uninstall="/desinstalacao.sql" ></estrutura>
+  </plugin>
+</manifest>
