@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <modification>
-  <name>SuprimentoDeFundos</name>
-  <id>SuprimentoDeFundos</id>
+  <name>EmpenhoNumeroProcessoLicitatorio</name>
+  <id>EmpenhoNumeroProcessoLicitatorio</id>
   <ecidade-version>2.3.47</ecidade-version>
 
   <file path='forms/db_frmempempenhonota.php'>
